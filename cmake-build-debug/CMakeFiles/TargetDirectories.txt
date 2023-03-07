@@ -1,0 +1,3 @@
+/home/sara/Documents/GitHub/Simpel_shell/cmake-build-debug/CMakeFiles/Simpel_shell.dir
+/home/sara/Documents/GitHub/Simpel_shell/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/sara/Documents/GitHub/Simpel_shell/cmake-build-debug/CMakeFiles/rebuild_cache.dir
