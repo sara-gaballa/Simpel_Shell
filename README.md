@@ -1,5 +1,5 @@
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=22&pause=1000&color=2D338A&width=435&lines=Simple+Shell+(Multi-Processing))](https://git.io/typing-svg)
-
+![Screenshot from 2023-03-07 14-23-56](https://user-images.githubusercontent.com/96298154/223421828-567a93f2-3bf7-42d6-a5b6-811b2479eb63.png)
 ## [![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Tilt+Warp&pause=1000&color=16088A&multiline=true&repeat=false&width=435&lines=Project+description)](https://git.io/typing-svg)
 1. The internal shell command "exit" which terminates the shell
     * **Concepts**: shell commands, exiting the shell.
