@@ -6,8 +6,8 @@
 #include <string.h>
 #include <errno.h>
 #define  MAX_LENGTH 1024
-FILE *fptr;
-void removing_qoutes(char *string){
+FILE *fptr; //public pointer to the text file
+void removingQoutes(char *string){
     int j = 0;
     char new_string[1024];
     for (int i = 0; string[i] != '\0' && string[i] != '\n' ; ++i) {
@@ -19,8 +19,7 @@ void removing_qoutes(char *string){
     new_string[j] = '\0';
     strcpy(string, new_string);
 }
-
-void execute_shell_bultin(char **command, char *argument[], int AR_NUM){  ////
+void executeShellBultin(char **command, char *argument[]){  ////
     if(!strcmp(*command,"cd")){
         if (argument[0] == NULL) {
 //            chdir(getenv(""));
@@ -49,7 +48,7 @@ void execute_shell_bultin(char **command, char *argument[], int AR_NUM){  ////
         value = strtok(NULL, "\n");
         value[strlen(value)] = '\0';
         // printf("%s  %s", var, value);
-        removing_qoutes(value);
+        removingQoutes(value);
         if (setenv(var, value, 1) != 0) {
             perror("setenv error");
             exit(EXIT_FAILURE);
@@ -58,7 +57,7 @@ void execute_shell_bultin(char **command, char *argument[], int AR_NUM){  ////
     }else if(!strcmp(*command,"echo")){
         char *arg = argument[0]; //'hello $x'
         printf("%s   %d\n",argument[0], strlen(argument[0]));
-        removing_qoutes(arg);
+        removingQoutes(arg);
         printf("%s   %d\n",arg, strlen(arg));
         for (int i = 0; i < strlen(arg); ++i) {
             if(arg[i] == '$'){
@@ -91,7 +90,7 @@ void execute_command(char **args, int ground){
         int status;
         waitpid(pid, &status, 0);
         fptr = fopen("log.txt","a");
-        fprintf(fptr,"%s","child terminated\n");
+        fprintf(fptr,"%s","Child is terminated\n");
         fclose(fptr);
         if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
             printf("Command returned non-zero exit status\n");
@@ -112,7 +111,7 @@ void evaluate_expression(char input[], char **command, char *argument[], int *AR
         *built_in = 1;
         argument[0] = strtok(NULL, "\n");
         //argument[0][strlen(argument[0])] = '\n';
-        printf("%d\n", strlen(argument[0])); //taking the single argument of the built-in commands
+       // printf("%d\n", strlen(argument[0])); //taking the single argument of the built-in commands
     }
     else {
         //TO DO export arguments and echo
@@ -135,15 +134,14 @@ void setup_environment(){
     char path[1024];
     chdir(getcwd(path,sizeof (path)));
 }
-void proc_exit()//
-{
+void proc_exit(){
     int wstat;
     pid_t pid;
     while (1) {
        // printf("hehehe");
         pid = wait3(&wstat, WNOHANG, NULL);
         fptr = fopen("log.txt","a");
-        fprintf(fptr,"Return code: %d\n", wstat);
+        fprintf(fptr,"CHILD TERMINATED , Return code: %d\n", wstat);
         if (pid == 0 || pid == -1)
             return;
         fclose(fptr);
@@ -151,31 +149,25 @@ void proc_exit()//
 }
 int main(int argc, char *argv[])
 {
-
-//    if(fptr == NULL)
-//    {
-//        printf("Error!");
-//        exit(1);
-//    }
+    fptr = fopen("log.txt", "w");//erase the file from any previous content
+    fclose(fptr);
     signal (SIGCHLD, proc_exit);
     setup_environment();
     while (1){
-       // printf("ddw");
         char input[MAX_LENGTH];
         char *command;
         char *argument[10];
         int Arr_NUM = 0;
         int B_IN = 0;
+        printf("SHELL-> ");
         fgets(input, sizeof(input), stdin);
         if(!strcmp(input, "\n")){ //if the user enters an empty line
             continue;
         }
-        //taking commands and arguments from the input
-        evaluate_expression(input, &command, argument, &Arr_NUM, &B_IN);
-        printf( "%d %d\n", Arr_NUM, B_IN);
+        evaluate_expression(input, &command, argument, &Arr_NUM, &B_IN);//taking commands and arguments from the input
+        //printf( "%d %d\n", Arr_NUM, B_IN);
         //printf( "%s\n", argument[0]);
-
-        if(!strcmp(command,"exit")){
+        if(!strcmp(command,"exit")){ //exit command to terminate the shell
             exit(0);
         }
         else {
@@ -209,7 +201,7 @@ int main(int argc, char *argv[])
                 }
                 execute_command(&args, ground); //args must terminate with null
             } else {
-                execute_shell_bultin(&command, argument , Arr_NUM );
+                executeShellBultin(&command, argument);
             }
         }
     }
