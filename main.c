@@ -78,8 +78,6 @@ void executeShellBultin(char **command, char *argument[]){  ////
         printf("\n");
     }
 }
-//for no &
-//back &
 void execute_command(char **args, int ground){
     pid_t pid = fork();
     if (pid == 0) { /* Child process */
@@ -111,7 +109,7 @@ void evaluate_expression(char input[], char **command, char *argument[], int *AR
         *built_in = 1;
         argument[0] = strtok(NULL, "\n");
         //argument[0][strlen(argument[0])] = '\n';
-       // printf("%d\n", strlen(argument[0])); //taking the single argument of the built-in commands
+        // printf("%d\n", strlen(argument[0])); //taking the single argument of the built-in commands
     }
     else {
         //TO DO export arguments and echo
@@ -138,7 +136,7 @@ void proc_exit(){
     int wstat;
     pid_t pid;
     while (1) {
-       // printf("hehehe");
+        // printf("hehehe");
         pid = wait3(&wstat, WNOHANG, NULL);
         fptr = fopen("log.txt","a");
         fprintf(fptr,"CHILD TERMINATED , Return code: %d\n", wstat);
@@ -192,11 +190,11 @@ int main(int argc, char *argv[])
                         break;
                     }
                     else{
-                    args[ i + 1 ] = argument[i];
-                    if(argument[i][0] == '&'){
-                        ground = 1;
-                        break;
-                    }
+                        args[ i + 1 ] = argument[i];
+                        if(argument[i][0] == '&'){
+                            ground = 1;
+                            break;
+                        }
                     }
                 }
                 execute_command(&args, ground); //args must terminate with null
