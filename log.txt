@@ -1,5 +1,2 @@
-Child is terminated
-Child is terminated
-Child is terminated
-Child is terminated
-Child is terminated
+Child 28723 is terminated
+Child 28725 is terminated
