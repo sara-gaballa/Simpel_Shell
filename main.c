@@ -100,8 +100,9 @@ void execute_command(char **args, int ground){//executing commands
         if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
             printf("Command returned non-zero exit status\n");
         }
-    } else { /* Error */
-        printf("Failed to fork process\n");
+    } else if(pid == -1){ /* Error */
+        perror("fork");
+        exit(1);
     }
 }
 void Parse_Input(char input[], char **command, char *argument[], int *AR_NUM, int *built_in ){//parsing input entered by the user
@@ -175,11 +176,11 @@ int main()
                         break;
                     }
                     else{
-                        args[ i + 1 ] = argument[i];
                         if(argument[i][0] == '&'){
                             ground = 1;
                             break;
                         }
+                        args[ i + 1 ] = argument[i];
                     }
                 }
                 execute_command(&args, ground); //args must terminate with null
